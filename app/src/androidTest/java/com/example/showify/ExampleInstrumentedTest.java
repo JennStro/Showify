@@ -1,6 +1,7 @@
 package com.example.showify;
 
 import android.content.Context;
+import android.widget.Switch;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
