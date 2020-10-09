@@ -7,10 +7,10 @@
     tools:context=".MainActivity">
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/switchListener"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="turnOnListener"
+        android:onClick="switchListener"
         android:text="Get notified"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
