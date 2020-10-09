@@ -9,24 +9,32 @@ import android.widget.Switch;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor(Executors.defaultThreadFactory());
     private ListenToSpotify listenToSpotify = new ListenToSpotify(executorService);
+    private Switch switcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.switcher = findViewById(R.id.switchListener);
+        switcher.setChecked(false);
     }
 
-    public void switchListener() {
-        Switch switcher = findViewById(R.id.switchListener);
-        if (switcher.isChecked()) {
-            listenToSpotify.turnOff();
-        } else {
+    public void switchListener(View view) {
+        if (shouldTurnOnListener()) {
             listenToSpotify.turnOn();
+        } else {
+            listenToSpotify.turnOff();
         }
+    }
+
+    private boolean shouldTurnOnListener() {
+        return switcher.isChecked();
     }
 }

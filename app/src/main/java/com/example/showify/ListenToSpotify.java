@@ -2,6 +2,8 @@ package com.example.showify;
 
 
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ListenToSpotify  {
 
@@ -12,10 +14,10 @@ public class ListenToSpotify  {
     }
 
     public void turnOff() {
-
+        Logger.getLogger("Listen to spotify:").log(Level.INFO, "Stopped.");
     }
 
     public void turnOn() {
-
+        Logger.getLogger("Listen to spotify:").log(Level.INFO, "Started.");
     }
 }
