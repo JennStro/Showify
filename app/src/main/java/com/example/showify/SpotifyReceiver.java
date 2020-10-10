@@ -1,8 +1,15 @@
 package com.example.showify;
 
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +33,20 @@ public class SpotifyReceiver extends BroadcastReceiver {
                 String artistName = intent.getStringExtra("artist");
                 String albumName = intent.getStringExtra("album");
                 String trackName = intent.getStringExtra("track");
-                Logger.getLogger("Spotify says:").log(Level.INFO, "Artist: " + artistName + " Track: " + trackName + "Album: " + albumName);
+                Logger.getLogger("Spotify says:").log(Level.INFO, "Artist: " + artistName + " Track: " + trackName + " Album: " + albumName);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Notify")
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setContentTitle("hei")
+                        .setContentText("hello")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setTimeoutAfter(50)
+                        .setAutoCancel(true)
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+                notificationManager.notify(1, builder.build());
             }
         }
     }
