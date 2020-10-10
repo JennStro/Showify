@@ -6,9 +6,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.Switch;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class MainActivity extends AppCompatActivity {
 
     private Switch switcher;
@@ -27,20 +24,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (receiver == null) {
-            Logger.getLogger("Stopping: ").log(Level.WARNING, "Receiver is null.");
-        } else {
+        try {
             unregisterReceiver(receiver);
+        } catch(IllegalArgumentException e) {
+
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (receiver == null) {
-            Logger.getLogger("Stopping: ").log(Level.WARNING, "Receiver is null.");
-        } else {
+        try {
             unregisterReceiver(receiver);
+        } catch(IllegalArgumentException e) {
+
+            e.printStackTrace();
         }
     }
 }
