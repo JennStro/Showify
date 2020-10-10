@@ -16,6 +16,7 @@ public class SpotifyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        Logger.getLogger("Received:").log(Level.INFO, "somethubng");
         if (action.equals(BroadcastTypes.METADATA_CHANGED)) {
             String trackId = intent.getStringExtra("id");
             String artistName = intent.getStringExtra("artist");

@@ -2,36 +2,51 @@ package com.example.showify;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Switch;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor(Executors.defaultThreadFactory());
-    private ListenToSpotify listenToSpotify = new ListenToSpotify(executorService);
     private Switch switcher;
+    private SpotifyReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.switcher = findViewById(R.id.switchListener);
-        switcher.setChecked(false);
+        this.receiver = new SpotifyReceiver();
+        IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
+        //filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        //filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
+        //IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
+        //filter.addAction("com.spotify.music.playbackstatechanged");
+        //filter.addAction("com.spotify.music.queuechanged");
+        //filter.addAction("com.spotify.music.metadatachanged");
+        this.registerReceiver(receiver, filter);
     }
 
-    public void switchListener(View view) {
-        if (shouldTurnOnListener()) {
-            listenToSpotify.turnOn();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (receiver == null) {
+            Logger.getLogger("Stopping: ").log(Level.WARNING, "Receiver is null.");
         } else {
-            listenToSpotify.turnOff();
+            unregisterReceiver(receiver);
         }
     }
 
-    private boolean shouldTurnOnListener() {
-        return switcher.isChecked();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver == null) {
+            Logger.getLogger("Stopping: ").log(Level.WARNING, "Receiver is null.");
+        } else {
+            unregisterReceiver(receiver);
+        }
     }
 }
