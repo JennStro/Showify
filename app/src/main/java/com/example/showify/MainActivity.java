@@ -21,12 +21,6 @@ public class MainActivity extends AppCompatActivity {
         this.switcher = findViewById(R.id.switchListener);
         this.receiver = new SpotifyReceiver();
         IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
-        //filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-        //filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
-        //IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
-        //filter.addAction("com.spotify.music.playbackstatechanged");
-        //filter.addAction("com.spotify.music.queuechanged");
-        //filter.addAction("com.spotify.music.metadatachanged");
         this.registerReceiver(receiver, filter);
     }
 
