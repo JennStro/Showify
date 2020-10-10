@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class SpotifyReceiver extends BroadcastReceiver {
 
     private static String formerTrackId;
+    private final int CHANNEL_ID = 1;
 
     static final class BroadcastTypes {
         static final String SPOTIFY_PACKAGE = "com.spotify.music";
@@ -46,7 +47,7 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-                notificationManager.notify(1, builder.build());
+                notificationManager.notify(CHANNEL_ID, builder.build());
             }
         }
     }
