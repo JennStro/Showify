@@ -3,12 +3,18 @@ package com.example.showify;
 
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.PowerManager;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -19,6 +25,7 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
     private static String formerTrackId;
     private final int CHANNEL_ID = 1;
+    private final Activity activity;
     private TextView textView;
 
     static final class BroadcastTypes {
@@ -26,10 +33,11 @@ public class SpotifyReceiver extends BroadcastReceiver {
         static final String METADATA_CHANGED = SPOTIFY_PACKAGE + ".metadatachanged";
     }
 
-    public SpotifyReceiver(TextView textView) {
-        this.textView = textView;
+    public SpotifyReceiver(Activity activity) {
+        this.activity = activity;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O_MR1)
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -48,30 +56,26 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
                 String message = "Artist: " + artistName + "\n" + "Track: " + trackName + "\n" + "Album: " + albumName;
 
-                if (!(textView == null)) {
-                    textView.setText(message);
-                    textView.invalidate();
-                    Logger.getLogger("TextView: ").log(Level.INFO, textView.getText().toString());
-                }
-
-
                 Logger.getLogger("Spotify says:").log(Level.INFO, "Artist: " + artistName + "\n" + "Track: " + trackName + "\n" + "Album: " + albumName);
 
-                RemoteViews expandedView = new RemoteViews(context.getPackageName(), R.layout.notification_large);
+                NotificationCompat.Builder getNotificationView = new NotificationCompat.Builder(context, "Notify")
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setStyle(new NotificationCompat.BigTextStyle())
+                        .setContentTitle("")
+                        .setContentText("");
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
                 NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
-                        //.setStyle(notificationStyle)
-                        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                        .setCustomContentView(expandedView)
+                        .setStyle(new NotificationCompat.BigTextStyle())
                         .setContentTitle("Spotify says: ")
                         .setContentText("Artist: " + artistName + "\n" + "Track: " + trackName + "\n" + "Album: " + albumName)
-                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setPriority(notificationManager.IMPORTANCE_HIGH)
+                        .setWhen(0)
                         .setTimeoutAfter(10000)
                         .setAutoCancel(true)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
                 notificationManager.notify(CHANNEL_ID, notification.build());
             }
