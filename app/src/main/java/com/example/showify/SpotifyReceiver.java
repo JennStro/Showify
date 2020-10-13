@@ -35,13 +35,16 @@ public class SpotifyReceiver extends BroadcastReceiver {
                 String artistName = intent.getStringExtra("artist");
                 String albumName = intent.getStringExtra("album");
                 String trackName = intent.getStringExtra("track");
-                NotificationCompat.BigTextStyle bigTextMessage = new NotificationCompat.BigTextStyle();
-                bigTextMessage.bigText("Artist: " + artistName + "\n Track: " + trackName + "\n Album: " + albumName);
-                Logger.getLogger("Spotify says:").log(Level.INFO, bigTextMessage.toString());
+
+                NotificationCompat.InboxStyle notificationStyle =  new NotificationCompat.InboxStyle();
+                notificationStyle.addLine("Artist: " + artistName);
+                notificationStyle.addLine("Track: " + trackName);
+                notificationStyle.addLine("Album: " + albumName);
+                Logger.getLogger("Spotify says:").log(Level.INFO, "Artist: " + artistName + "\n" + "Track: " + trackName + "\n" + "Album: " + albumName);
 
                 NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
-                        .setStyle(bigTextMessage)
+                        .setStyle(notificationStyle)
                         .setContentTitle("Spotify says: ")
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setTimeoutAfter(5000)
