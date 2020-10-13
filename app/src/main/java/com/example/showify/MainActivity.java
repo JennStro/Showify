@@ -7,7 +7,9 @@ import android.app.NotificationManager;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Switch;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,8 +23,10 @@ public class MainActivity extends AppCompatActivity {
         this.switcher = findViewById(R.id.switchListener);
 
         createNotificationChannel();
+    }
 
-        this.receiver = new SpotifyReceiver();
+    public void switchOn(View view) {
+        this.receiver = new SpotifyReceiver((TextView) findViewById(R.id.message));
         IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
         this.registerReceiver(receiver, filter);
     }
