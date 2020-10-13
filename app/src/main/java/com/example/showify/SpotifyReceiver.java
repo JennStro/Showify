@@ -1,6 +1,7 @@
 package com.example.showify;
 
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -34,20 +35,22 @@ public class SpotifyReceiver extends BroadcastReceiver {
                 String artistName = intent.getStringExtra("artist");
                 String albumName = intent.getStringExtra("album");
                 String trackName = intent.getStringExtra("track");
-                Logger.getLogger("Spotify says:").log(Level.INFO, "Artist: " + artistName + " Track: " + trackName + " Album: " + albumName);
+                NotificationCompat.BigTextStyle bigTextMessage = new NotificationCompat.BigTextStyle();
+                bigTextMessage.bigText("Artist: " + artistName + "\n Track: " + trackName + "\n Album: " + albumName);
+                Logger.getLogger("Spotify says:").log(Level.INFO, bigTextMessage.toString());
 
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Notify")
+                NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
-                        .setContentTitle("hei")
-                        .setContentText("hello")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setTimeoutAfter(50)
+                        .setStyle(bigTextMessage)
+                        .setContentTitle("Spotify says: ")
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setTimeoutAfter(5000)
                         .setAutoCancel(true)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-                notificationManager.notify(CHANNEL_ID, builder.build());
+                notificationManager.notify(CHANNEL_ID, notification.build());
             }
         }
     }
