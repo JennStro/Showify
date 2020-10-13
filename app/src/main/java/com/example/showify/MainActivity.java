@@ -26,9 +26,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchOn(View view) {
-        this.receiver = new SpotifyReceiver(this);
-        IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
-        this.registerReceiver(receiver, filter);
+        if (switcher.isChecked()) {
+            this.receiver = new SpotifyReceiver(this);
+            IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
+            this.registerReceiver(receiver, filter);
+        } else {
+            try {
+                unregisterReceiver(receiver);
+            } catch(IllegalArgumentException e) {
+
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override
