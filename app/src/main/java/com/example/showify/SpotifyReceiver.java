@@ -1,20 +1,11 @@
 package com.example.showify;
 
-
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.PowerManager;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
@@ -46,6 +37,7 @@ public class SpotifyReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.O_MR1)
     @Override
     public void onReceive(Context context, Intent intent) {
+
         String action = intent.getAction();
         Logger.getLogger("Received:").log(Level.INFO, "Receiver got a message");
         if (action.equals(BroadcastTypes.METADATA_CHANGED)) {
@@ -64,19 +56,7 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
                 Logger.getLogger("Spotify says:").log(Level.INFO, message);
 
-                PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
-
-                if (!powerManager.isInteractive()){
-                    PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"Shofity::WakingUp");
-                    wakeLock.acquire(10000);
-                    PowerManager.WakeLock wakeLock_cpu = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                            "Shofity::WakingUp");
-                    wakeLock_cpu.acquire(10000);
-                    wakeLock.release();
-                    wakeLock_cpu.release();
-                }
-
-
+                wakeUpScreen(context);
 
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
@@ -110,6 +90,20 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
                 notificationManager.notify(CHANNEL_ID, myNotification.build());
             }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
+    private void wakeUpScreen(Context context) {
+        PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
+        if (!powerManager.isInteractive()){
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"Shofity::WakingUp");
+            wakeLock.acquire(10000);
+            PowerManager.WakeLock wakeLock_cpu = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    "Shofity::WakingUp");
+            wakeLock_cpu.acquire(10000);
+            wakeLock.release();
+            wakeLock_cpu.release();
         }
     }
 
