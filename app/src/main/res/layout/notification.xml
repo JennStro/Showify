@@ -5,24 +5,24 @@
     >
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/artist"
         android:layout_width="match_parent"
         android:layout_height="31dp"
-        android:text="Artist: "
+        android:text="@string/artist"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/track"
         android:layout_width="match_parent"
         android:layout_height="31dp"
-        android:text="Artist: "
+        android:text="@string/track"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/album"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:text="Artist: "
+        android:text="@string/album"
         android:textStyle="bold" />
 
 </LinearLayout>

@@ -47,11 +47,6 @@ public class SpotifyReceiver extends BroadcastReceiver {
                 String albumName = intent.getStringExtra("album");
                 String trackName = intent.getStringExtra("track");
 
-                NotificationCompat.InboxStyle notificationStyle =  new NotificationCompat.InboxStyle();
-                notificationStyle.addLine("Artist: " + artistName);
-                notificationStyle.addLine("Track: " + trackName);
-                notificationStyle.addLine("Album: " + albumName);
-
                 String message = "Artist: " + artistName + "\n" + "Track: " + trackName + "\n" + "Album: " + albumName;
 
                 Logger.getLogger("Spotify says:").log(Level.INFO, message);
@@ -59,18 +54,6 @@ public class SpotifyReceiver extends BroadcastReceiver {
                 wakeUpScreen(context);
 
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-                NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "Notify")
-                        .setSmallIcon(R.drawable.notification_icon)
-                        .setStyle(notificationStyle)
-                        .setContentTitle("Spotify says: ")
-                        .setPriority(notificationManager.IMPORTANCE_NONE)
-                        .setWhen(0)
-                        .setTimeoutAfter(5000)
-                        .setAutoCancel(true)
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-
-
 
                 RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification);
 

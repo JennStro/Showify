@@ -3,4 +3,7 @@
     <string name="channel_name">notify</string>
     <string name="channel_description">notification from spotify</string>
     <string name="message">message</string>
+    <string name="artist">artist</string>
+    <string name="track">track</string>
+    <string name="album">album</string>
 </resources>
