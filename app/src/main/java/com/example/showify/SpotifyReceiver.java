@@ -60,9 +60,6 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-                notificationManager.getNotificationChannel("Notify").enableLights(true);
-                notificationManager.getNotificationChannel("Notify").setLockscreenVisibility(1);
-
                 NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
                         .setStyle(notificationStyle)
