@@ -4,6 +4,7 @@ package com.example.showify;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -58,19 +59,38 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
                 Logger.getLogger("Spotify says:").log(Level.INFO, message);
 
+
+
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
                 NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
                         .setStyle(notificationStyle)
                         .setContentTitle("Spotify says: ")
-                        .setPriority(notificationManager.IMPORTANCE_HIGH)
+                        .setPriority(notificationManager.IMPORTANCE_NONE)
                         .setWhen(0)
-                        .setTimeoutAfter(10000)
+                        .setTimeoutAfter(5000)
                         .setAutoCancel(true)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-                notificationManager.notify(CHANNEL_ID, notification.build());
+
+
+                RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification);
+                //RemoteViews notificationLayoutExpanded = new RemoteViews(getPackageName(), R.layout.notification_large);
+
+// Apply the layouts to the notification
+                NotificationCompat.Builder myNotification = new NotificationCompat.Builder(context, "Notify")
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setContent(notificationLayout)
+                        .setCustomContentView(notificationLayout)
+                        .setCustomBigContentView(notificationLayout).setContentIntent(pendingIntent)
+                        .setTimeoutAfter(5000)
+                        .setAutoCancel(true)
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+                notificationManager.notify(CHANNEL_ID, myNotification.build());
             }
         }
     }
