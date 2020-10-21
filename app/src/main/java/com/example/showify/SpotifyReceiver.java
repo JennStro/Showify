@@ -2,14 +2,17 @@ package com.example.showify;
 
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Build;
 import android.os.PowerManager;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RemoteViews;
@@ -21,6 +24,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static android.content.Context.POWER_SERVICE;
 
 public class SpotifyReceiver extends BroadcastReceiver {
 
@@ -59,11 +64,24 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
                 Logger.getLogger("Spotify says:").log(Level.INFO, message);
 
+                PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
+
+                if (!powerManager.isInteractive()){
+                    PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"Shofity::WakingUp");
+                    wakeLock.acquire(10000);
+                    PowerManager.WakeLock wakeLock_cpu = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                            "Shofity::WakingUp");
+                    wakeLock_cpu.acquire(10000);
+                    wakeLock.release();
+                    wakeLock_cpu.release();
+                }
+
 
 
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                notificationManager.getNotificationChannel("Notify").enableLights(true);
+                notificationManager.getNotificationChannel("Notify").setLockscreenVisibility(1);
 
                 NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
@@ -78,17 +96,17 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
 
                 RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification);
-                //RemoteViews notificationLayoutExpanded = new RemoteViews(getPackageName(), R.layout.notification_large);
 
-// Apply the layouts to the notification
                 NotificationCompat.Builder myNotification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
                         .setContent(notificationLayout)
+                        //.setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                         .setCustomContentView(notificationLayout)
-                        .setCustomBigContentView(notificationLayout).setContentIntent(pendingIntent)
                         .setTimeoutAfter(5000)
                         .setAutoCancel(true)
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setPriority(notificationManager.IMPORTANCE_HIGH)
+                        .setCustomHeadsUpContentView(notificationLayout);
 
                 notificationManager.notify(CHANNEL_ID, myNotification.build());
             }
