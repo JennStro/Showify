@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RemoteViews;
 import android.widget.Switch;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchOn(View view) {
         if (switcher.isChecked()) {
-            this.receiver = new SpotifyReceiver(this);
+            this.receiver = new SpotifyReceiver();
             IntentFilter filter = new IntentFilter("com.spotify.music.metadatachanged");
             this.registerReceiver(receiver, filter);
         } else {
@@ -68,5 +71,4 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
 }

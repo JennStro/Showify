@@ -1,13 +1,11 @@
 package com.example.showify;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -22,16 +20,10 @@ public class SpotifyReceiver extends BroadcastReceiver {
 
     private static String formerTrackId;
     private final int CHANNEL_ID = 1;
-    private final Activity activity;
-    private TextView textView;
 
     static final class BroadcastTypes {
         static final String SPOTIFY_PACKAGE = "com.spotify.music";
         static final String METADATA_CHANGED = SPOTIFY_PACKAGE + ".metadatachanged";
-    }
-
-    public SpotifyReceiver(Activity activity) {
-        this.activity = activity;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O_MR1)
@@ -56,13 +48,15 @@ public class SpotifyReceiver extends BroadcastReceiver {
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
                 RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification);
+                notificationLayout.setTextViewText(R.id.artist, "Artist: " + artistName);
+                notificationLayout.setTextViewText(R.id.track, "Track: " + trackName);
+                notificationLayout.setTextViewText(R.id.album, "Album: " + albumName);
 
                 NotificationCompat.Builder myNotification = new NotificationCompat.Builder(context, "Notify")
                         .setSmallIcon(R.drawable.notification_icon)
                         .setContent(notificationLayout)
-                        //.setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                         .setCustomContentView(notificationLayout)
-                        .setTimeoutAfter(5000)
+                        .setTimeoutAfter(10000)
                         .setAutoCancel(true)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                         .setPriority(notificationManager.IMPORTANCE_HIGH)
