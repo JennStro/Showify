@@ -67,14 +67,16 @@ public class SpotifyReceiver extends BroadcastReceiver {
         }
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     private void wakeUpScreen(Context context) {
         PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
         if (!powerManager.isInteractive()){
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"Shofity::WakingUp");
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"Showify::WakingUp");
             wakeLock.acquire(10000);
             PowerManager.WakeLock wakeLock_cpu = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    "Shofity::WakingUp");
+                    "Showify::WakingUp");
             wakeLock_cpu.acquire(10000);
             wakeLock.release();
             wakeLock_cpu.release();
