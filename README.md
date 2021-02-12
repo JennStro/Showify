@@ -4,6 +4,6 @@ This android application listens to Spotify events when Spotify setting "broadca
 
 This app is built on top of Androids tutorial for creating your first application in Android. 
 
-Note: This app is used only for private use and do not take into consideration androids different versions. 
+##### Note: This app is used only for private use and do not take into consideration androids different versions. Use at own risk.
 
 
